@@ -1,0 +1,10 @@
+{
+    "name": "qwerty/cli",
+    "authors": [
+        {
+            "name": "prolite",
+            "email": "oleg.dyachenko1993@gmail.com"
+        }
+    ],
+    "require": {}
+}
