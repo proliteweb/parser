@@ -2,25 +2,30 @@
 
 	namespace App\Console\Commands;
 
+	use App\Components\Parser\Extractor;
+	use App\Components\Parser\Filter;
 	use \App\Console\Console;
+	use \App\Components\Parser\Parser;
 
 	class ParseImagesCommand extends Console
 	{
+		private function getUrlParse(){
+			//todo - change to $this->getParameter('url');
+			return 'citrus.ua';
+		}
 
 		public function handle()
 		{
-			$parser = new \App\Components\Parser('citrus.ua');
+			$parser = new Parser($this->getUrlParse());
 			$html = $parser->getUrlContent();
-
-			dd($html);
-
-			$regex = '/<img[^>]+>/i';
-			preg_match_all($regex, $html, $matches);
-			$img = array();
-			foreach ($matches[0] as $img_tag) {
-				preg_match_all('/(src)=("[^"]*")/i', $img_tag, $img[$img_tag]);
-			}
-			dd(__METHOD__, array_column($img, 2));
+			$extractor = new Extractor($html);
+			$images = $extractor->extractAttributesFromTags($extractor->extractImages(), ['src', 'title', 'alt']);
+			$linksTag = $extractor->extractByTagName('a');
+			$links = $extractor->extractAttributesFromTags($linksTag, ['href']);
+			$links = array_column(array_values($links), 'href');
+			$filter = new Filter();
+			$links = $filter->getLocalLinks($links, $this->getUrlParse());
+			dd(__METHOD__, $links);
 
 		}
 	}
