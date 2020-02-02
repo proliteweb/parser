@@ -14,7 +14,7 @@
 	{
 		private function getUrlParse(){
 			//todo - change to $this->getParameter('url');
-			return 'citrus.ua';
+			return 'http://bessarabskiy-dvorik.com/';
 		}
 
 		public function handle()
@@ -23,8 +23,12 @@
 			$html = $parser->getUrlContent();
 			$extractor = new Extractor($html);
 			$images = $extractor->extractAttributesFromTags($extractor->extractImages(), ['src', 'title', 'alt']);
-
-			EventManager::fire(new ImagesExtractedEvent($images));
+			$start = microtime(true);
+			$event = new ImagesExtractedEvent($images);
+			foreach (range(0, 10000000) as $n){
+				EventManager::fire(new ImagesExtractedEvent($images));
+			}
+			dd(__METHOD__, microtime(true) - $start);
 
 			$linksTag = $extractor->extractByTagName('a');
 			$links = $extractor->extractAttributesFromTags($linksTag, ['href']);

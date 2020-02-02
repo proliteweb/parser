@@ -47,9 +47,6 @@
 					/** @var $listener EventListener */
 					try {
 						($listener = new $listenerClass);
-						if (!classImplementsInterface($listener, EventListener::class)) {
-							continue;
-						}
 						$listener->handle($event);
 					} catch (\Exception $e) {
 					}

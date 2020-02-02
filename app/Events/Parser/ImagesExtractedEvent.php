@@ -13,12 +13,18 @@
 
 		public function __construct(array $images)
 		{
-			$this->images = $images;
+			$this->setImages($images);
 		}
 
 		public function getImages(): array
 		{
 			return $this->images;
+		}
+
+		public function setImages(array $images): self
+		{
+			$this->images = $images;
+			return $this;
 		}
 
 	}
