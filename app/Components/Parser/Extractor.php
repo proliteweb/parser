@@ -3,18 +3,21 @@
 	namespace App\Components\Parser;
 
 
+	use App\Helpers\Arr;
+
 	class Extractor
 	{
 		private $html;
 
-		public function __construct(string $html)
+		public function __construct(string $html = '')
 		{
 			$this->setHtml($html);
 		}
 
-		public function setHtml(string $html)
+		public function setHtml(string $html): self
 		{
 			$this->html = $html;
+			return $this;
 		}
 
 		public function extractImages(): array
@@ -34,7 +37,7 @@
 			return $tags;
 		}
 
-		public function extractAttributesFromTags(array $htmlTags, $attributes)
+		public function extractAttributesFromTags(array $htmlTags, $attributes): array
 		{
 			$attributes = implode('|', (array)$attributes);
 			$values = [];
@@ -51,6 +54,16 @@
 				return $newArr;
 			};
 			return array_map($callback, $values);
+		}
+
+		public function extractAttributeFromTags(array $htmlTags, string $attribute)
+		{
+			$attributesArr = $this->extractAttributesFromTags($htmlTags, $attribute);
+			$callback = function (array $item) use ($attribute) {
+				return Arr::get($item, $attribute, '');
+			};
+			return array_map($callback, $attributesArr);
+
 		}
 
 	}

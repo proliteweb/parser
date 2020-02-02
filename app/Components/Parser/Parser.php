@@ -26,6 +26,16 @@
 			$this->url = $url;
 		}
 
+		public function getUrl()
+		{
+			return $this->prepareUrl($this->url);
+		}
+
+		private function prepareUrl(string $url)
+		{
+			return rtrim($url, '/');
+		}
+
 		public function setUserAgent(string $agent)
 		{
 			$this->userAgent = $agent;
@@ -38,7 +48,8 @@
 
 		public function getUrlContent(): ResponseContainerContract
 		{
-			$ch = curl_init($this->url);
+
+			$ch = curl_init($this->getUrl());
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			curl_setopt($ch, CURLOPT_HEADER, true);
 			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, $this->followRedirects);
