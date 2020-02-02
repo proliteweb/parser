@@ -3,6 +3,7 @@
 	namespace App\Components\Events;
 
 	use App\Contracts\Event;
+	use App\Contracts\EventListener;
 	use App\Events\Parser\ImagesExtractedEvent;
 	use App\Helpers\Arr;
 	use App\Listeners\Parser\ImagesExtractedListener;
@@ -26,17 +27,31 @@
 
 		}
 
-		public static function fire(Event $event): void
+		private static function isEventRegistered(Event $event)
 		{
 			$key = get_class($event);
-			if (Arr::has(static::$listen, $key)) {
-				foreach (Arr::get(static::$listen, $key) as $listenerClass) {
+			return Arr::has(static::$listen, $key);
+		}
+
+
+		private static function getEventListeners(Event $event)
+		{
+			$key = get_class($event);
+			return Arr::get(static::$listen, $key, []);
+		}
+
+		public static function fire(Event $event): void
+		{
+			if (static::isEventRegistered($event)) {
+				foreach (self::getEventListeners($event) as $listenerClass) {
 					/** @var $listener EventListener */
-					try{
+					try {
 						($listener = new $listenerClass);
+						if (!classImplementsInterface($listener, EventListener::class)) {
+							continue;
+						}
 						$listener->handle($event);
-					} catch (\Error $e){
-						dd(__METHOD__, $e);
+					} catch (\Exception $e) {
 					}
 				}
 			}
