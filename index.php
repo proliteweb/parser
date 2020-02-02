@@ -5,8 +5,12 @@
 	$options = getopt("f:hp:");
 //	dd($argv);
 
-	$imageParser = new \App\Console\Commands\ParseImagesCommand();
-	$imageParser->handle();
+	try{
+		$imageParser = new \App\Console\Commands\ParseImagesCommand();
+		$imageParser->handle();
+	} catch (Error $error){
+		new \App\Exceptions\Handler($error);
+	}
 
 //	dd(__METHOD__, $matches);
 	unset($argv[0]);

@@ -38,6 +38,7 @@
 		{
 			$attributes = implode('|', (array)$attributes);
 			$values = [];
+			//todo remake to DOMDocument::getAttribute
 			foreach ($htmlTags as $img_tag) {
 				preg_match_all('/(' . $attributes . ')=("[^"]*")/i', $img_tag, $values[ $img_tag ]);
 			}
