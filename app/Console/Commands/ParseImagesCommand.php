@@ -10,6 +10,7 @@
 	use App\Console\Console;
 	use App\Contracts\ResponseCodes;
 	use App\Events\Parser\ImagesExtractedEvent;
+	use App\Events\Parser\LinksExtractedEvent;
 
 
 	class ParseImagesCommand extends Console
@@ -43,14 +44,17 @@
 			($extractor = $this->getExtractor())->setHtml($responseContainer->getBody());
 			$images = $extractor->extractAttributeFromTags($extractor->extractImages(), 'src');
 
-			EventManager::fire(new ImagesExtractedEvent($images));
+			$this->onImagesExtracted($images);
 
-			$linksTag = $extractor->extractByTagName('a');
+			$linksTag = $extractor->extractTagByName('a');
 			$links = $extractor->extractAttributeFromTags($linksTag, 'href');
+
+			$this->onLinksExtracted($links);
+
 			$filter = $this->getFilter();
-			$localLinks = $filter->getLocalLinks($links, $this->getUrlParse());
+			$localLinks = $filter->getRelateLinks($links, $this->getUrlParse());
 			dd(__METHOD__, $localLinks);
-			$this->urlManager->addUrl($localLinks);
+			$this->getUrlManager()->addUrl($localLinks);
 			dd(__METHOD__, $links);
 		}
 
@@ -73,6 +77,16 @@
 		private function getFilter(): Filter
 		{
 			return $this->filter;
+		}
+
+		private function onImagesExtracted(array $images)
+		{
+			EventManager::fire(new ImagesExtractedEvent($images));
+		}
+
+		private function onLinksExtracted(array $links)
+		{
+			EventManager::fire(new LinksExtractedEvent($links));
 		}
 
 		private function getUrlParse()

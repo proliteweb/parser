@@ -13,6 +13,7 @@
 
 		public function __construct(array $images)
 		{
+			// $images - is html, not extracted tags
 			$this->setImages($images);
 		}
 
@@ -21,7 +22,7 @@
 			return $this->images;
 		}
 
-		public function setImages(array $images): self
+		private function setImages(array $images): self
 		{
 			$this->images = $images;
 			return $this;

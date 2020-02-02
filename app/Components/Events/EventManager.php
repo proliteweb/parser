@@ -5,8 +5,10 @@
 	use App\Contracts\Event;
 	use App\Contracts\EventListener;
 	use App\Events\Parser\ImagesExtractedEvent;
+	use App\Events\Parser\LinksExtractedEvent;
 	use App\Helpers\Arr;
 	use App\Listeners\Parser\ImagesExtractedListener;
+	use App\Listeners\Parser\LinksExtractedListener;
 
 	class EventManager
 	{
@@ -14,18 +16,10 @@
 			ImagesExtractedEvent::class => [
 				ImagesExtractedListener::class,
 			],
+			LinksExtractedEvent::class  => [
+				LinksExtractedListener::class,
+			],
 		];
-
-		public static function registerEvent(Event $event)
-		{
-			$key = get_class($event);
-			static::$events[ $key ]['event'] = $event;
-		}
-
-		public static function registerListener(EventListener $listener)
-		{
-
-		}
 
 		private static function isEventRegistered(Event $event)
 		{

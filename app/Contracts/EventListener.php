@@ -4,5 +4,5 @@
 
 	interface EventListener
 	{
-		public function handle( $event);
+		public function handle( Event $event);
 	}

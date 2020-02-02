@@ -8,10 +8,25 @@
 
 	namespace App\Exceptions;
 
+	use App\Components\Filesystem\Config;
+
 	class Handler
 	{
 		public function __construct(\Error $error)
 		{
-			dd(__METHOD__, $error->getMessage(), $error);
+			if (Config::get('app.env', 'production') !== 'local') {
+				return null;
+			}
+			$this->printMessage($error);
+		}
+
+		private function printMessage(\Error $error)
+		{
+			dd($error->getMessage());
+		}
+
+		private function report(\Error $error)
+		{
+			// do awesome report
 		}
 	}

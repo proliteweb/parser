@@ -1,4 +1,5 @@
 <?php
-return [
-	'locale' => 'en',
-];
+	return [
+		'locale' => 'en',
+		'env'    => 'local',
+	];

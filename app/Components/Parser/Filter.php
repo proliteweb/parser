@@ -19,7 +19,7 @@
 		}
 
 
-		public function getLocalLinks(array $links, $domain)
+		public function getRelateLinks(array $links, $domain)
 		{
 			$links = array_filter($links, function (string $link) use ($domain) {
 				$isRelative = (Str::startsWith($link, '/') && !Str::startsWith($link, '//'));

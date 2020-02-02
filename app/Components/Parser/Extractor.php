@@ -22,10 +22,10 @@
 
 		public function extractImages(): array
 		{
-			return $this->extractByTagName('img');
+			return $this->extractTagByName('img');
 		}
 
-		public function extractByTagName(string $tag)
+		public function extractTagByName(string $tag)
 		{
 			libxml_use_internal_errors(true);
 			$dom = new \DOMDocument();
@@ -45,11 +45,13 @@
 			foreach ($htmlTags as $img_tag) {
 				preg_match_all('/(' . $attributes . ')=("[^"]*")/i', $img_tag, $values[ $img_tag ]);
 			}
-			$callback = function (array $imgArr) {
-				array_shift($imgArr);
+			$callback = function (array $attrArr) {
+				array_shift($attrArr);
+				//$attrArr[0] - attribute key like src, title etc.
+				//$attrArr[1] - attribute value - "/path/to/some" etc.
 				$newArr = [];
-				foreach ($imgArr[0] as $index => $attr) {
-					$newArr[ $attr ] = trim($imgArr[1][ $index ], '"');
+				foreach ($attrArr[0] as $index => $attr) {
+					$newArr[ $attr ] = trim($attrArr[1][ $index ], '"');
 				}
 				return $newArr;
 			};
