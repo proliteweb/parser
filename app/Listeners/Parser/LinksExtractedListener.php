@@ -10,12 +10,12 @@
 	class LinksExtractedListener implements EventListener
 	{
 
-		private function checkEvent($event)
+		private function checkEvent($event): bool
 		{
 			return $event instanceof LinksExtractedEvent;
 		}
 
-		public function handle(Event $event)
+		public function handle(Event $event): void
 		{
 			if (!$this->checkEvent($event)) {
 				return null;
@@ -23,6 +23,6 @@
 			/** @var $event LinksExtractedEvent */
 
 //			$links = $event->getLinks();
-			//todo do something with images tags
+			//todo do something with links
 		}
 	}

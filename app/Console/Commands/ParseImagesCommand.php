@@ -5,6 +5,7 @@
 	use App\Components\Events\EventManager;
 	use App\Components\Parser\Extractor;
 	use App\Components\Parser\Filter;
+	use App\Components\Parser\ImagesContainer;
 	use App\Components\Parser\Parser;
 	use App\Components\Parser\UrlCreator;
 	use App\Components\Parser\UrlManager;
@@ -29,7 +30,7 @@
 		private $parser;
 
 		//todo temporary for dev - move this to ImageManager
-		private $images = [];
+		private $imagesContainer;
 
 		public function __construct()
 		{
@@ -38,21 +39,20 @@
 			$this->extractor = new Extractor();
 			$this->filter = new Filter();
 			$this->parser = new Parser($this->getUrlParse());
+			$this->imagesContainer = new ImagesContainer();
 
 			$this->setDefaults();
 		}
 
 		public function handle()
 		{
-			// whoops recursion
-			$iter = 500;
+			$limitUrls = 10000;
 			$this->parse($this->getUrlParse());
-			while ($this->getUrlManager()->getUnProceededUrls() && $iter) {
-				$unpoceeded = $this->getUrlManager()->getUnProceededUrl();
-				$this->parse($unpoceeded);
-				$iter--;
+			while ($this->getUrlManager()->getUnProceededUrls() && $limitUrls) {
+				$limitUrls--;
+				$this->parse($this->getUrlManager()->getUnProceededUrl());
 			}
-			dd(__METHOD__, array_unique($this->images), $this->getUrlManager());
+			d(array_values(array_unique($this->images), $this->getUrlManager()));
 		}
 
 		private function parse($url)
@@ -66,7 +66,7 @@
 			}
 			($extractor = $this->getExtractor())->setHtml($responseContainer->getBody());
 			$images = $extractor->extractAttributeFromTags($extractor->extractImages(), 'src');
-			$this->images = array_merge($this->images, $images);
+			$this->getImagesContainer()->addImages($images);
 
 //			$this->onImagesExtracted($images);
 
@@ -118,10 +118,15 @@
 			EventManager::fire(new LinksExtractedEvent($links));
 		}
 
+		private function getImagesContainer(): ImagesContainer
+		{
+			return $this->imagesContainer;
+		}
+
 		private function getUrlParse()
 		{
-			//todo - change to $this->getParameter('url');
-			return UrlCreator::addProtocol('bessarabskiy.comnd-x.com/');
+			//todo - change to $this->getInputParameter('url');
+			return UrlCreator::addProtocol('https://montajnik.od.ua/');
 		}
 
 

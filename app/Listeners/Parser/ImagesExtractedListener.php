@@ -10,16 +10,17 @@
 	class ImagesExtractedListener implements EventListener
 	{
 
-		private function checkEvent($event)
+		private function checkEvent($event): bool
 		{
 			return $event instanceof ImagesExtractedEvent;
 		}
 
-		public function handle(Event $event)
+		public function handle(Event $event): void
 		{
 			if (!$this->checkEvent($event)) {
 				return null;
 			}
-			//todo do something with images tags
+			/** @var $event ImagesExtractedEvent */
+			//todo do something with images
 		}
 	}

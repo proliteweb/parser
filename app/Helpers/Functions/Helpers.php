@@ -8,7 +8,7 @@
 		function classImplementsInterface($class, $interface): bool
 		{
 			$interfaces = class_implements($class);
-			return \App\Helpers\Arr::has($interfaces, $interface);
+			return in_array($interface, $interfaces);
 		}
 	}
 
@@ -18,8 +18,8 @@
 			$backtrace = debug_backtrace();
 			$trace = array_shift($backtrace);
 			$prevTrace = array_shift($backtrace);
-			$methodName = \App\Helpers\Arr::get($prevTrace, 'function');
-			$traceText = \App\Helpers\Arr::get($trace, 'file') . ' ' . $methodName . ' ' . \App\Helpers\Arr::get($trace, 'line');
+			$methodName = $prevTrace['function'] ?? '';
+			$traceText = ($trace['file'] ?? '') . ' ' . $methodName . ' ' . ($trace['line'] ?? '');
 			dd($traceText, ...func_get_args());
 		}
 
