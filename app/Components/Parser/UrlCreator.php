@@ -9,6 +9,8 @@
 	namespace App\Components\Parser;
 
 
+	use App\Helpers\Str;
+
 	class UrlCreator
 	{
 		private static $defaultProtocol = 'http://';
@@ -44,8 +46,17 @@
 			return parse_url($url, PHP_URL_QUERY);
 		}
 
+		public static function isRelativeUrl($url)
+		{
+			return (Str::startsWith($url, '/')) && (!Str::startsWith($url, '//'));
+		}
+
 		public static function create(string $sourceUrl, string $domain)
 		{
+			if (self::isRelativeUrl($sourceUrl)){
+				return self::addProtocol(static::extractDomainFromUrl($domain) . '/' . trim($sourceUrl, '/'));
+			}
+
 			$url = static::extractDomainFromUrl($domain)
 				. '/' .
 				trim(static::getUrlPath($sourceUrl), '/')

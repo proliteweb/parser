@@ -59,8 +59,11 @@
 
 		private function parse($url)
 		{
+			file_put_contents('url.txt', $url . PHP_EOL, FILE_APPEND);
+
 			$domain = UrlCreator::addProtocol(UrlCreator::extractDomainFromUrl($url));
 			$url = UrlCreator::addProtocol($url);
+
 			($parser = $this->getParser())->setUrl($url);
 			$responseContainer = $parser->getUrlContent();
 			if (ResponseCodes::HTTP_OK !== $responseContainer->getResponseCode()) {
@@ -81,7 +84,6 @@
 
 			$localLinks = UrlCreator::processMany($localLinks, $url);
 			$this->getUrlManager()->addProceededUrl($url)->addUrlList($localLinks)->addUnProceededUrls($localLinks);
-
 		}
 
 
@@ -128,8 +130,6 @@
 		private function getUrlParse()
 		{
 			//todo - change to $this->getInputParameter('url');
-			return UrlCreator::addProtocol('https://www.mastervelo.com');
+			return UrlCreator::addProtocol('http://bessarabskiy-dvorik.com/');
 		}
-
-
 	}

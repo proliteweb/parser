@@ -22,12 +22,12 @@
 		public function getRelateLinks(array $links, $domain)
 		{
 			$links = array_filter($links, function (string $link) use ($domain) {
-				$isRelative = (Str::startsWith($link, '/') && !Str::startsWith($link, '//'));
+				$isRelative = UrlCreator::isRelativeUrl($link);
 				$containsDomain = UrlCreator::extractDomainFromUrl($link) === UrlCreator::extractDomainFromUrl($domain);
 				return $isRelative || $containsDomain;
 			});
 
-			if ($this->isFilterUnique()){
+			if ($this->isFilterUnique()) {
 				$links = array_unique($links);
 			}
 			return $links;
