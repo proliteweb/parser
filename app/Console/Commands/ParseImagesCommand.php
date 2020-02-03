@@ -46,13 +46,13 @@
 
 		public function handle()
 		{
-			$limitUrls = 10000;
+			$limitUrls = 20;
 			$this->parse($this->getUrlParse());
 			while ($this->getUrlManager()->getUnProceededUrls() && $limitUrls) {
 				$limitUrls--;
 				$this->parse($this->getUrlManager()->getUnProceededUrl());
 			}
-			d(array_values(array_unique($this->images), $this->getUrlManager()));
+			d($this->getImagesContainer(), $this->getUrlManager());
 		}
 
 		private function parse($url)
@@ -68,15 +68,15 @@
 			$images = $extractor->extractAttributeFromTags($extractor->extractImages(), 'src');
 			$this->getImagesContainer()->addImages($images);
 
-//			$this->onImagesExtracted($images);
+			$this->onImagesExtracted($images, $url);
 
 			$linksTag = $extractor->extractTagByName('a');
 			$links = $extractor->extractAttributeFromTags($linksTag, 'href');
 
-//			$this->onLinksExtracted($links);
+			$this->onLinksExtracted($links, $url);
 
-			$filter = $this->getFilter();
-			$localLinks = $filter->getRelateLinks($links, $domain);
+			$localLinks = $this->getFilter()->getRelateLinks($links, $domain);
+
 			$localLinks = UrlCreator::processMany($localLinks, $url);
 			$this->getUrlManager()->addProceededUrl($url)->addUrlList($localLinks)->addUnProceededUrls($localLinks);
 
@@ -108,14 +108,14 @@
 			return $this->filter;
 		}
 
-		private function onImagesExtracted(array $images)
+		private function onImagesExtracted(array $images, $url)
 		{
-			EventManager::fire(new ImagesExtractedEvent($images));
+			EventManager::fire(new ImagesExtractedEvent($images, $url));
 		}
 
-		private function onLinksExtracted(array $links)
+		private function onLinksExtracted(array $links, $url)
 		{
-			EventManager::fire(new LinksExtractedEvent($links));
+			EventManager::fire(new LinksExtractedEvent($links, $url));
 		}
 
 		private function getImagesContainer(): ImagesContainer
@@ -126,7 +126,7 @@
 		private function getUrlParse()
 		{
 			//todo - change to $this->getInputParameter('url');
-			return UrlCreator::addProtocol('https://montajnik.od.ua/');
+			return UrlCreator::addProtocol('https://www.mastervelo.com');
 		}
 
 

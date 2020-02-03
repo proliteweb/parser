@@ -39,11 +39,17 @@
 			return $domain;
 		}
 
+		public static function getUrlQuery($url)
+		{
+			return parse_url($url, PHP_URL_QUERY);
+		}
+
 		public static function create(string $sourceUrl, string $domain)
 		{
 			$url = static::extractDomainFromUrl($domain)
 				. '/' .
-				trim(static::getUrlPath($sourceUrl), '/');
+				trim(static::getUrlPath($sourceUrl), '/')
+				. (($query = html_entity_decode(self::getUrlQuery($sourceUrl))) ? '?' . $query : '');
 			return self::addProtocol($url);
 		}
 

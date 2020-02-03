@@ -10,12 +10,17 @@
 		 * @var array
 		 */
 		private $links;
+		/**
+		 * @var null
+		 */
+		private $url;
 
-		public function __construct(array $links)
+		public function __construct(array $links, ?string $url = null)
 		{
 			// $links - is key value array [ (key is html of link) => $linkSrc ]
 			// that, if you need another attributes from link, you can extract then by Extractor
 			$this->setLinks($links);
+			$this->url = $url;
 		}
 
 		public function getLinks(): array
@@ -27,6 +32,11 @@
 		{
 			$this->links = $links;
 			return $this;
+		}
+
+		public function getUrl():?string
+		{
+			return $this->url;
 		}
 
 	}

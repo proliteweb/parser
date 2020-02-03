@@ -18,7 +18,7 @@
 		public function handle(Event $event): void
 		{
 			if (!$this->checkEvent($event)) {
-				return null;
+				return;
 			}
 			/** @var $event LinksExtractedEvent */
 
