@@ -13,6 +13,8 @@
 
 		public function __construct(array $links)
 		{
+			// $links - is key value array [ (key is html of link) => $linkSrc ]
+			// that, if you need another attributes from link, you can extract then by Extractor
 			$this->setLinks($links);
 		}
 

@@ -13,7 +13,8 @@
 
 		public function __construct(array $images)
 		{
-			// $images - is html, not extracted tags
+			// $images - is key value array [(key is html of image) => $imageSrc ]
+			// that, if you need another attributes from image, you can extract then by Extractor
 			$this->setImages($images);
 		}
 

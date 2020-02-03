@@ -12,20 +12,20 @@
 
 	class Handler
 	{
-		public function __construct(\Error $error)
-		{
+		public function handle(\Throwable $error){
 			if (Config::get('app.env', 'production') !== 'local') {
 				return null;
 			}
 			$this->printMessage($error);
 		}
 
-		private function printMessage(\Error $error)
+		private function printMessage(\Throwable $error)
 		{
-			dd($error->getMessage());
+//			echo '<pre>';
+			d($error);
 		}
 
-		private function report(\Error $error)
+		private function report(\Throwable $error)
 		{
 			// do awesome report
 		}
