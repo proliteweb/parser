@@ -59,8 +59,6 @@
 
 		private function parse($url)
 		{
-			file_put_contents('url.txt', $url . PHP_EOL, FILE_APPEND);
-
 			$domain = UrlCreator::addProtocol(UrlCreator::extractDomainFromUrl($url));
 			$url = UrlCreator::addProtocol($url);
 
