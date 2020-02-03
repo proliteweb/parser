@@ -4,7 +4,7 @@
 
 	use App\Contracts\Event;
 
-	class ImagesExtractedEvent implements Event
+	class ImagesSingleUrlExtractedEvent implements Event
 	{
 		/**
 		 * @var array

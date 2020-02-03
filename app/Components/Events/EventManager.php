@@ -4,20 +4,20 @@
 
 	use App\Contracts\Event;
 	use App\Contracts\EventListener;
-	use App\Events\Parser\ImagesExtractedEvent;
-	use App\Events\Parser\LinksExtractedEvent;
+	use App\Events\Parser\ImagesSingleUrlExtractedEvent;
+	use App\Events\Parser\LinksSingleUrlExtractedEvent;
 	use App\Helpers\Arr;
-	use App\Listeners\Parser\ImagesExtractedListener;
-	use App\Listeners\Parser\LinksExtractedListener;
+	use App\Listeners\Parser\ImagesSingleUrlExtractedListener;
+	use App\Listeners\Parser\LinksSingleUrlExtractedListener;
 
 	class EventManager
 	{
 		protected static $listen = [
-			ImagesExtractedEvent::class => [
-				ImagesExtractedListener::class,
+			ImagesSingleUrlExtractedEvent::class => [
+				ImagesSingleUrlExtractedListener::class,
 			],
-			LinksExtractedEvent::class  => [
-				LinksExtractedListener::class,
+			LinksSingleUrlExtractedEvent::class  => [
+				LinksSingleUrlExtractedListener::class,
 			],
 		];
 

@@ -4,7 +4,7 @@
 
 	use App\Contracts\Event;
 
-	class LinksExtractedEvent implements Event
+	class LinksSingleUrlExtractedEvent implements Event
 	{
 		/**
 		 * @var array

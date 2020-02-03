@@ -3,6 +3,7 @@
 	namespace App\Console\Commands;
 
 	use App\Components\Events\EventManager;
+	use App\Components\Filesystem\Config;
 	use App\Components\Parser\Extractor;
 	use App\Components\Parser\Filter;
 	use App\Components\Parser\ImagesContainer;
@@ -11,12 +12,13 @@
 	use App\Components\Parser\UrlManager;
 	use App\Console\Console;
 	use App\Contracts\ResponseCodes;
-	use App\Events\Parser\ImagesExtractedEvent;
-	use App\Events\Parser\LinksExtractedEvent;
+	use App\Events\Parser\ImagesSingleUrlExtractedEvent;
+	use App\Events\Parser\LinksSingleUrlExtractedEvent;
 
 
 	class ParseImagesCommand extends Console
 	{
+		private $limitParse = 10000;
 		/** @var UrlManager */
 		private $urlManager;
 
@@ -46,7 +48,7 @@
 
 		public function handle()
 		{
-			$limitUrls = 20;
+			$limitUrls = (int)Config::get('parser.limit_iterations', $this->limitParse);
 			$this->parse($this->getUrlParse());
 			while ($this->getUrlManager()->getUnProceededUrls() && $limitUrls) {
 				$limitUrls--;
@@ -110,12 +112,12 @@
 
 		private function onImagesExtracted(array $images, $url)
 		{
-			EventManager::fire(new ImagesExtractedEvent($images, $url));
+			EventManager::fire(new ImagesSingleUrlExtractedEvent($images, $url));
 		}
 
 		private function onLinksExtracted(array $links, $url)
 		{
-			EventManager::fire(new LinksExtractedEvent($links, $url));
+			EventManager::fire(new LinksSingleUrlExtractedEvent($links, $url));
 		}
 
 		private function getImagesContainer(): ImagesContainer

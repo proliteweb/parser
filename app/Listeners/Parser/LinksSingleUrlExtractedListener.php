@@ -5,14 +5,14 @@
 
 	use App\Contracts\Event;
 	use App\Contracts\EventListener;
-	use App\Events\Parser\LinksExtractedEvent;
+	use App\Events\Parser\LinksSingleUrlExtractedEvent;
 
-	class LinksExtractedListener implements EventListener
+	class LinksSingleUrlExtractedListener implements EventListener
 	{
 
 		private function checkEvent($event): bool
 		{
-			return $event instanceof LinksExtractedEvent;
+			return $event instanceof LinksSingleUrlExtractedEvent;
 		}
 
 		public function handle(Event $event): void
@@ -20,7 +20,7 @@
 			if (!$this->checkEvent($event)) {
 				return;
 			}
-			/** @var $event LinksExtractedEvent */
+			/** @var $event LinksSingleUrlExtractedEvent */
 
 //			$links = $event->getLinks();
 			//todo do something with links
