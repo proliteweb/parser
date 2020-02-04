@@ -3,6 +3,7 @@
 	namespace App\Console\Commands;
 
 	use App\Components\Events\EventManager;
+	use App\Components\Export\ExportFactory;
 	use App\Components\Filesystem\Config;
 	use App\Components\Parser\Extractor;
 	use App\Components\Parser\Filter;
@@ -54,7 +55,9 @@
 				$limitUrls--;
 				$this->parse($this->getUrlManager()->getUnProceededUrl());
 			}
-			d($this->getImagesContainer(), $this->getUrlManager());
+			if ($path = $this->storeImages($this->getImagesContainer())){
+				echo 'Images stored to: ' . $path;
+			}
 		}
 
 		private function parse($url)
@@ -82,6 +85,20 @@
 
 			$localLinks = UrlCreator::processMany($localLinks, $url);
 			$this->getUrlManager()->addProceededUrl($url)->addUrlList($localLinks)->addUnProceededUrls($localLinks);
+		}
+
+		private function storeImages(ImagesContainer $imagesContainer):?string
+		{
+			if ($images = $imagesContainer->getImages()) {
+				$format = 'csv';
+				$exporter = ExportFactory::makeExporterFromFormat($format);
+				if ($exporter) {
+					$pathSave = 'exports/' . UrlCreator::extractDomainFromUrl($this->getUrlParse()) . '-' . date('Y-m-d-H-i-s');
+					$pathSave = $exporter->export($images, $pathSave);
+					return $pathSave;
+				}
+			}
+			return null;
 		}
 
 
@@ -128,6 +145,6 @@
 		private function getUrlParse()
 		{
 			//todo - change to $this->getInputParameter('url');
-			return UrlCreator::addProtocol('http://bessarabskiy-dvorik.com/');
+			return UrlCreator::addProtocol('bessarabskiy-dvorik.com/menu/holodnye-zakuski');
 		}
 	}

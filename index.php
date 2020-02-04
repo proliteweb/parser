@@ -16,4 +16,4 @@
 	unset($argv[0]);
 //dd(fgets(STDIN, 1024));
 //dd( filter_var('https://vk.com', FILTER_VALIDATE_URL));
-	d($options);
+//	d($options);

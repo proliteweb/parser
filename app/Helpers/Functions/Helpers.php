@@ -1,7 +1,18 @@
 <?php
+
+	function project_path($path = null)
+	{
+		return PROJECT_DIR . (($path) ? DIRECTORY_SEPARATOR . ltrim($path, '/') : '');
+	}
+
 	function config_path()
 	{
-		return PROJECT_DIR . '/config';
+		return project_path('/config');
+	}
+
+	function storage_path($path = null)
+	{
+		return project_path('storage' . DIRECTORY_SEPARATOR . 'files' . DIRECTORY_SEPARATOR . ltrim($path, '/'));
 	}
 
 	if (!function_exists('classImplementsInterface')) {
@@ -20,7 +31,7 @@
 			$prevTrace = array_shift($backtrace);
 			$methodName = $prevTrace['function'] ?? '';
 			$traceText = ($trace['file'] ?? '') . ' ' . $methodName . ' ' . ($trace['line'] ?? '');
-			dd($traceText, ...func_get_args());
+			var_dump($traceText, ...func_get_args());
 		}
 
 	}

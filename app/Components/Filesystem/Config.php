@@ -6,8 +6,8 @@ use App\Helpers\Arr;
 
 class Config
 {
-
 	private static $initialized = false;
+
 	private static $config = [];
 
 	public static function get(string $key, $default = null)
