@@ -8,6 +8,7 @@
 
 	namespace App\Components\Export;
 
+	use App\Components\Export\Exporters\ArrayExporter;
 	use App\Components\Export\Exporters\CsvExporter;
 	use App\Components\Storage\Storage;
 	use App\Contracts\Export\ExporterContract;
@@ -19,6 +20,8 @@
 			switch ($format) {
 				case 'csv':
 					return new CsvExporter(new Storage());
+				case 'array':
+					return new ArrayExporter(new Storage());
 			}
 			return null;
 		}

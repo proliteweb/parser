@@ -1,4 +1,4 @@
 <?php
 	return [
-		'limit_iterations' => 100000,
+		'limit_iterations' => 10000,
 	];

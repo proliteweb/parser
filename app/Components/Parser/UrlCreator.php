@@ -32,7 +32,7 @@
 
 		public static function getUrlPath(string $url)
 		{
-			if (array_key_exists($url, static::$cachedDomains)) {
+			if (array_key_exists($url, static::$cachedUrlWithoutHost)) {
 				return static::$cachedUrlWithoutHost[ $url ];
 			}
 			$domain = parse_url($url, PHP_URL_PATH);

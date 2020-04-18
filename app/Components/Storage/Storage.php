@@ -1,25 +1,21 @@
 <?php
-	/**
-	 * Created by PhpStorm.
-	 * User: qwerty
-	 * Date: 04.02.2020
-	 * Time: 7:07
-	 */
+
 namespace App\Components\Storage;
-	class Storage
+class Storage
+{
+	private function getStoragePath()
 	{
-		private function getStoragePath()
-		{
-			return storage_path();
-		}
-
-		public function store(string $fileName, $content)
-		{
-			if (!file_exists(dirname($fileName))) {
-				mkdir(dirname($fileName), 0777, true);
-			}
-			file_put_contents($fileName, $content);
-		}
-
-
+		return storage_path();
 	}
+
+	public function store(string $fileName, $content)
+	{
+		if (!file_exists(dirname($fileName)) && !mkdir($concurrentDirectory = dirname($fileName), 0777, true) && !is_dir($concurrentDirectory)) {
+			throw new \RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
+		}
+		file_put_contents($fileName, $content);
+	}
+
+
+
+}

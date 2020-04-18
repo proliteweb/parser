@@ -58,6 +58,7 @@
 			if ($path = $this->storeImages($this->getImagesContainer())){
 				echo 'Images stored to: ' . $path;
 			}
+			dd(__METHOD__, $this->getUrlManager()->getProceededUrls());
 		}
 
 		private function parse($url)
@@ -90,7 +91,7 @@
 		private function storeImages(ImagesContainer $imagesContainer):?string
 		{
 			if ($images = $imagesContainer->getImages()) {
-				$format = 'csv';
+				$format = 'array';
 				$exporter = ExportFactory::makeExporterFromFormat($format);
 				if ($exporter) {
 					$pathSave = 'exports/' . UrlCreator::extractDomainFromUrl($this->getUrlParse()) . '-' . date('Y-m-d-H-i-s');
@@ -145,6 +146,6 @@
 		private function getUrlParse()
 		{
 			//todo - change to $this->getInputParameter('url');
-			return UrlCreator::addProtocol('bessarabskiy-dvorik.com/menu/holodnye-zakuski');
+			return UrlCreator::addProtocol('http://iversta.ca/');
 		}
 	}
